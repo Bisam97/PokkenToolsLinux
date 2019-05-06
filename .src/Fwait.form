@@ -1,0 +1,32 @@
+# Gambas Form File 3.0
+
+{ Form Form
+  MoveScaled(0,0,64,33)
+  { Spinner1 Spinner
+    MoveScaled(20,1,24,11)
+  }
+  { ProgressBar1 ProgressBar
+    MoveScaled(0,23,64,4)
+    Visible = False
+  }
+  { Timer1 #Timer
+    #MoveScaled(50,0)
+    Delay = 500
+  }
+  { Ltxt Label
+    MoveScaled(9.4286,28,45,4)
+  }
+  { ProgressBar2 ProgressBar
+    MoveScaled(0,19,64,4)
+    Visible = False
+  }
+  { Label1 Label
+    MoveScaled(9.4286,15,45,4)
+    Text = ("Please wait this can take a wile")
+  }
+  { LCDLabel1 LCDLabel
+    MoveScaled(39,28,24,4)
+    Text = ("Hallo")
+    Sheared = True
+  }
+}

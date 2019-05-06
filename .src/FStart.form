@@ -1,0 +1,146 @@
+# Gambas Form File 3.0
+
+{ Form Form
+  MoveScaled(0,0,64,64)
+  { !Wizard1 Wizard
+    MoveScaled(0,1,64,63)
+    #Public = True
+    Count = 3
+    Index = 0
+    Text = ("Step 0 Preparing")
+    { Label3 Label
+      MoveScaled(1,2,62,9)
+      Text = ("please boot the current version of Lockpick RCM for dumping the \nconsole keys and after booting into the CFW Lockpick for \ndumping the titlekeys.")
+    }
+    { URLLabel1 URLLabel
+      MoveScaled(1,13,13,4)
+      Font = Font["Underline"]
+      Foreground = Color.Blue
+      Text = ("Lockpick RCM")
+      Link = "https://wiidatabase.de/switch-downloads/switch-tools/lockpick-rcm/"
+    }
+    { URLLabel2 URLLabel
+      MoveScaled(17,13,9,4)
+      Font = Font["Underline"]
+      Text = ("Lockpick")
+      Link = "https://wiidatabase.de/switch-downloads/switch-tools/lockpick/"
+    }
+    { Label4 Label
+      MoveScaled(28,13,24,4)
+      Text = ("Links to Wiidatabase.de")
+    }
+    { Label5 Label
+      MoveScaled(1,20,53,11)
+      Text = ("After that insert your SD-Card in your PC enter the Path to \nthe SD-Card and Press the Button for the initial Setup \n(the Files from the both Lockpick apps will be Copyd in your \n\"/home/YourHomeName/.switch/\" dir)")
+    }
+    { Button4 Button
+      MoveScaled(24,44,16,4)
+      Text = ("Initial Setup")
+    }
+    { ButtonBox2 ButtonBox SDCardPath
+      Name = "ButtonBox2"
+      MoveScaled(20,38,24,4)
+    }
+    { URLLabel3 URLLabel
+      MoveScaled(44,48,20,4)
+      Text = ("Lockpick is by shchmue")
+      Link = "https://github.com/shchmue"
+    }
+    { Label16 Label
+      MoveScaled(1,32,41,6)
+      Text = ("Please Install with the InstallDotnet Script Dotnet\nFew Tools Need it")
+    }
+    Index = 1
+    Text = ("Step 1 Locating Pokken on the SD Card")
+    { Label1 Label
+      MoveScaled(1,1,42,7)
+      Text = ("Have you already a Pokken.nca \nand a Pokken Update.nca? then you can Skip this.")
+    }
+    { Label2 Label
+      MoveScaled(2,13,24,5)
+      Text = ("Please enter the path \nof your SD-Card Root")
+    }
+    { ButtonBox1 ButtonBox SDCardPath
+      Name = "ButtonBox1"
+      MoveScaled(21,14,37,4)
+    }
+    { Button3 Button
+      MoveScaled(21,20,29,4)
+      ToolTip = ("This search for you the Pokken Base and Update data")
+      Text = ("Search for Base and Updatedata")
+    }
+    { TextBox1 TextBox
+      MoveScaled(21,35,37,4)
+    }
+    { Label6 Label
+      MoveScaled(1,25,24,4)
+      Text = ("Pokken Base Data")
+    }
+    { Label7 Label
+      MoveScaled(1,29,24,4)
+      Text = ("Pokken Update Data")
+    }
+    { LPathToBase Label
+      MoveScaled(21,25,37,4)
+    }
+    { LPathToUp Label
+      MoveScaled(21,29,37,4)
+    }
+    { Label8 Label
+      MoveScaled(1,35,19,4)
+      Text = ("SD Seed ")
+    }
+    { Label9 Label
+      MoveScaled(1,41,24,4)
+      Text = ("Hactool Version")
+    }
+    { Label10 Label
+      MoveScaled(19,41,28,4)
+    }
+    { Button1 Button
+      MoveScaled(48,41,10,4)
+      Text = ("Update")
+    }
+    { URLLabel4 URLLabel
+      MoveScaled(47,48,16,4)
+      Text = ("Hactool by SciresM")
+      Link = "https://github.com/SciresM/hactool"
+    }
+    Index = 2
+    Text = ("Step 2 Extract the NCA data")
+    { Label11 Label
+      MoveScaled(4,0,44,14)
+      Text = ("Make sure you have the right title.keys and prod.keys \nin your .switch/ directory.\nIf you have make step 0 and 1 then Don't worry\nyou have the right files in the .switch directory\n")
+    }
+    { ButtonBox3 ButtonBox
+      MoveScaled(30,14,24,4)
+    }
+    { ButtonBox4 ButtonBox
+      MoveScaled(30,20,24,4)
+    }
+    { Label12 Label
+      MoveScaled(4,14,24,4)
+      Text = ("Path to Pokken Base NCA")
+    }
+    { Label13 Label
+      MoveScaled(4,20,24,4)
+      Text = ("Path to Pokken Update NCA")
+    }
+    { CheckBox1 CheckBox
+      MoveScaled(30,25,24,4)
+      Text = ("Valid")
+    }
+    { Label14 Label
+      MoveScaled(4,41,51,4)
+      Text = ("Press Ok to Extract the NCA to .switch/Extracts/Pokken/")
+    }
+    { Label15 Label
+      MoveScaled(4,44,47,6)
+      Text = ("The extract can need 10 - 30 min!! Don't Worry you \nget a Spining Circle")
+    }
+    Index = 0
+  }
+  { Timer1 #Timer
+    #MoveScaled(0,-1)
+  }
+}

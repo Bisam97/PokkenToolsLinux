@@ -1,0 +1,11 @@
+# Gambas Project File 3.0
+Title=PokkenTools
+Startup=FStart
+Version=0.0.3
+Component=gb.image
+Component=gb.gui
+Component=gb.form
+Component=gb.desktop
+TabSize=2
+Language=en_US
+Packager=1

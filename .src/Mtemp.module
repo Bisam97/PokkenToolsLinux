@@ -1,0 +1,13 @@
+' Gambas module file
+
+Public Sub main()
+  
+  Dim s As String
+  
+  For Each s In Dir("/home/bisam97/.switch/Extract/Pokken/romfs/NX/sound/master")
+    
+    Print "ColumnView1.Add('" & s & "', '" & s & "', Null, 'File name', '')"
+    
+  Next
+  
+End

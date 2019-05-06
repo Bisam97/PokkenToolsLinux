@@ -1,0 +1,166 @@
+' Gambas class file
+
+Private $hpanleMForm As FCMusic
+Private $Process As Process
+Private $moddingDir As String
+Private $moddingdirRomfs As String
+Private $musicModdingDir As String
+Private $origPathFs As String
+
+'Gambas class file
+
+Public Sub Form_Open()
+  
+  $Process = Exec ["bash", "--noediting"] For Input Output As "Process"
+  
+  TreeView1.Add("NX", "NX", Picture["icon:/16/directory"], "", "")
+  TreeView1.Add("2d", "2d", Picture["icon:/16/directory"], "NX")
+  TreeView1.Add("font", "font", Picture["icon:/16/directory"], "NX", "2d")
+  TreeView1.Add("movie", "movie", Picture["icon:/16/directory"], "NX", "font")
+  TreeView1.Add("packdata", "packdata", Picture["icon:/16/directory"], "NX", "movie")
+  TreeView1.Add("resource", "resource", Picture["icon:/16/directory"], "NX", "packdata")
+  TreeView1.Add("shader", "shader", Picture["icon:/16/directory"], "NX", "resource")
+  TreeView1.Add("sound", "sound", Picture["icon:/16/directory"], "NX", "shader")
+  TreeView1.Add("text", "text", Picture["icon:/16/directory"], "NX", "sound")
+  
+  TreeView1.Add("avatar", "avatar", Picture["icon:/16/directory"], "2d")
+  TreeView1.Add("master1", "master", Picture["icon:/16/directory"], "avatar")
+  
+  TreeView1.Add("avatar_thumbnail", "avatar_thumbnail", Picture["icon:/16/directory"], "2d")
+  TreeView1.Add("master2", "master", Picture["icon:/16/directory"], "avatar_thumbnail")
+  
+  TreeView1.Add("master3", "master", Picture["icon:/16/directory"], "movie")
+  
+  TreeView1.Add("chrind", "chrind", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("adhoc", "adhoc", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("league", "league", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("mytown", "mytown", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("vs_league_dm2", "vs_league_dm2", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("vs_league_sage", "vs_league_sage", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("chrdep", "chrdep", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("stage_select", "stage_select", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("ranking_cs", "ranking_cs", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("skit_sound", "skit_sound", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("cs_common_ui", "cs_common_ui", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("replay", "replay", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("shogo", "shogo", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("free_training", "free_training", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("avatar_customize", "avatar_customize", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("today_battle", "today_battle", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("npc_thumbnail", "npc_thumbnail", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("main_select", "main_select", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("navi", "navi", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("versus_local", "versus_local", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("islandmap", "islandmap", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("league_rankup", "league_rankup", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("battle", "battle", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("chrmhd", "chrmhd", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("singlemode", "singlemode", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("singlemode_cs", "singlemode_cs", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("resident", "resident", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("support_select_all", "support_select_all", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("staffroll", "staffroll", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("tutorial", "tutorial", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("league_sage", "league_sage", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("dlc", "dlc", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("local_lan", "local_lan", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("online", "online", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("skit_sprite", "skit_sprite", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("practice", "practice", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("stage", "stage", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("vs", "vs", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("chr_sprite", "chr_sprite", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("skit", "skit", Picture["icon:/16/directory"], "packdata")
+  TreeView1.Add("vs_image", "vs_image", Picture["icon:/16/directory"], "packdata")
+  
+  TreeView1.Add("master4", "master", Picture["icon:/16/directory"], "chrind")
+  TreeView1.Add("master5", "master", Picture["icon:/16/directory"], "adhoc")
+  TreeView1.Add("master6", "master", Picture["icon:/16/directory"], "league")
+  TreeView1.Add("master7", "master", Picture["icon:/16/directory"], "mytown")
+  TreeView1.Add("master8", "master", Picture["icon:/16/directory"], "vs_league_dm2")
+  TreeView1.Add("master9", "master", Picture["icon:/16/directory"], "vs_league_sage")
+  TreeView1.Add("master10", "master", Picture["icon:/16/directory"], "chrdep")
+  TreeView1.Add("master11", "master", Picture["icon:/16/directory"], "stage_select")
+  TreeView1.Add("master12", "master", Picture["icon:/16/directory"], "ranking_cs")
+  TreeView1.Add("master13", "master", Picture["icon:/16/directory"], "skit_sound")
+  TreeView1.Add("master14", "master", Picture["icon:/16/directory"], "cs_common_ui")
+  TreeView1.Add("master15", "master", Picture["icon:/16/directory"], "replay")
+  TreeView1.Add("master16", "master", Picture["icon:/16/directory"], "shogo")
+  TreeView1.Add("master17", "master", Picture["icon:/16/directory"], "free_training")
+  TreeView1.Add("master18", "master", Picture["icon:/16/directory"], "avatar_customize")
+  TreeView1.Add("master19", "master", Picture["icon:/16/directory"], "today_battle")
+  TreeView1.Add("master20", "master", Picture["icon:/16/directory"], "npc_thumbnail")
+  TreeView1.Add("master21", "master", Picture["icon:/16/directory"], "main_select")
+  TreeView1.Add("master22", "master", Picture["icon:/16/directory"], "navi")
+  TreeView1.Add("master23", "master", Picture["icon:/16/directory"], "versus_local")
+  TreeView1.Add("master24", "master", Picture["icon:/16/directory"], "islandmap")
+  TreeView1.Add("master25", "master", Picture["icon:/16/directory"], "league_rankup")
+  TreeView1.Add("master26", "master", Picture["icon:/16/directory"], "battle")
+  TreeView1.Add("master27", "master", Picture["icon:/16/directory"], "chrmhd")
+  TreeView1.Add("master28", "master", Picture["icon:/16/directory"], "singlemode")
+  TreeView1.Add("master29", "master", Picture["icon:/16/directory"], "singlemode_cs")
+  TreeView1.Add("master30", "master", Picture["icon:/16/directory"], "resident")
+  TreeView1.Add("master31", "master", Picture["icon:/16/directory"], "support_select_all")
+  TreeView1.Add("master32", "master", Picture["icon:/16/directory"], "staffroll")
+  TreeView1.Add("master33", "master", Picture["icon:/16/directory"], "tutorial")
+  TreeView1.Add("master34", "master", Picture["icon:/16/directory"], "league_sage")
+  TreeView1.Add("master35", "master", Picture["icon:/16/directory"], "dlc")
+  TreeView1.Add("master36", "master", Picture["icon:/16/directory"], "local_lan")
+  TreeView1.Add("master37", "master", Picture["icon:/16/directory"], "online")
+  TreeView1.Add("master38", "master", Picture["icon:/16/directory"], "skit_sprite")
+  TreeView1.Add("master39", "master", Picture["icon:/16/directory"], "practice")
+  TreeView1.Add("master40", "master", Picture["icon:/16/directory"], "stage")
+  TreeView1.Add("master41", "master", Picture["icon:/16/directory"], "vs")
+  TreeView1.Add("master42", "master", Picture["icon:/16/directory"], "chr_sprite")
+  TreeView1.Add("master43", "master", Picture["icon:/16/directory"], "skit")
+  TreeView1.Add("master44", "master", Picture["icon:/16/directory"], "vs_image")
+  
+  TreeView1.Add("master45", "master", Picture["icon:/16/directory"], "sound")
+  TreeView1.Add("master46", "master", Picture["icon:/16/directory"], "text")
+  
+  $origPathFs = User.Home &/ ".switch/Extract/Pokken/romfs"
+  
+  If Not Exist(User.Home &/ ".switch/Modding") Then Mkdir User.Home &/ ".switch/Modding"
+  If Not Exist(User.Home &/ ".switch/Modding/Pokken") Then Mkdir User.Home &/ ".switch/Modding/Pokken"
+  If Not Exist(User.Home &/ ".switch/Modding/Pokken/0100b3f000be2000") Then Mkdir User.Home &/ ".switch/Modding/Pokken/0100b3f000be2000"
+  
+  $moddingDir = User.Home &/ ".switch/Modding/Pokken/0100b3f000be2000"
+  $moddingdirRomfs = User.Home &/ ".switch/Modding/Pokken/0100b3f000be2000/romfs"
+  
+  If Not Exist($moddingdirRomfs) Then Mkdir $moddingdirRomfs
+  If Not Exist($moddingdirRomfs &/ "NX") Then Mkdir $moddingdirRomfs &/ "NX"
+  If Not Exist($moddingdirRomfs &/ "NX/sound") Then Mkdir $moddingdirRomfs &/ "NX/sound"
+  If Not Exist($moddingdirRomfs &/ "NX/sound/master") Then Mkdir $moddingdirRomfs &/ "NX/sound/master"
+  
+  $musicModdingDir = $moddingdirRomfs &/ "NX/sound/master"
+  
+End
+
+Public Sub Button1_Click()
+  
+  $hpanleMForm = New FCMusic($origPathFs, $musicModdingDir, Panel1)
+  $hpanleMForm.getP($Process)
+  
+End
+
+Public Sub Process_Read()
+  
+  Dim sStr As String
+  
+  Read #$Process, sStr, -256
+  
+  Print sStr
+  
+End
+
+Public Sub Process_Error(sStr As String)
+  
+  Message.Error(sStr, "Ok")
+  
+End
+
+Public Sub Form_Close()
+  
+  $Process.Kill()
+  
+End

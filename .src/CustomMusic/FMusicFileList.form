@@ -1,0 +1,19 @@
+# Gambas Form File 3.0
+
+{ Form Form
+  MoveScaled(0,0,108,63)
+  Resizable = False
+  Arrangement = Arrange.Vertical
+  AutoResize = True
+  { Panel1 Panel
+    MoveScaled(0,0,108,58)
+    Arrangement = Arrange.Fill
+    { GridView1 GridView
+      MoveScaled(0,0,102,58)
+    }
+  }
+  { Button1 Button
+    MoveScaled(46,58,16,5)
+    Text = ("Select")
+  }
+}

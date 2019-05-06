@@ -1,0 +1,41 @@
+# Gambas Form File 3.0
+
+{ Form Form
+  MoveScaled(0,0,72,41)
+  { Label1 Label
+    MoveScaled(1,2,15,4)
+    Text = ("Music File Select")
+  }
+  { ButtonBox1 ButtonBox
+    MoveScaled(15,2,52,4)
+  }
+  { !ButtonBox2 ButtonBox
+    MoveScaled(15,15,52,4)
+    #Public = True
+  }
+  { Label2 Label
+    MoveScaled(1,11,25,4)
+    Text = ("select the music to replace")
+  }
+  { Button1 Button
+    MoveScaled(67,15,4,4)
+    Text = ("▶")
+  }
+  { Button2 Button
+    MoveScaled(67,2,4,4)
+    Text = ("▶")
+  }
+  { Button3 Button
+    MoveScaled(15,22,20,4)
+    Text = ("Insert to nus3bank")
+  }
+  { Label3 Label
+    MoveScaled(1,6,24,4)
+    Text = ("Please no Files with ()")
+  }
+  { Label4 Label
+    MoveScaled(15,30,55,4)
+    Font = Font["+3"]
+    Foreground = &H47C065&
+  }
+}

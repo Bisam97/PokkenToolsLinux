@@ -1,0 +1,340 @@
+' Gambas class file
+
+Private Const ContendSize As String = "0000d0a08000" 
+Private Const UpdateContnedSize As String = "00002c662e00"
+Private $hProcess As Process
+Private $firstrun As Boolean = True
+Private $BaseValid As Boolean
+Private $UpValid As Boolean
+Private $Extract As Boolean
+Private $Update As Boolean
+
+Public Sub URLLabel2_Click()
+  
+  Desktop.Open(URLLabel2.Link)
+  
+End
+
+Public Sub URLLabel1_Click()
+  
+  Desktop.Open(URLLabel1.Link)
+  
+End
+
+Public Sub Button4_Click()
+  
+  Dim Keys As String
+  Dim Keysa As String[]
+  
+  If Not Exist(User.Home &/ ".switch/Backup") Then Mkdir User.Home &/ ".switch/Backup"
+  If Exist(ButtonBox2.Text & "//switch/prod.keys") And Exist(ButtonBox2.Text & "//switch/title.keys") Then
+    
+    If Not Exist(User.Home & "//.switch") Then Mkdir User.Home & "//.switch"
+    If Exist(User.Home & "//.switch/prod.keys") Then
+      Move User.Home & "//.switch/prod.keys" To User.Home & "//.switch/Backup/prod.keys.bak" & Year(Now) & Month(Now) & Day(Now) & Hour(Now) & Minute(Now)
+      Copy ButtonBox2.Text & "//switch/prod.keys" To User.Home & "//.switch/prod.keys"
+      Message.Info("the old Keys was Moved to " & User.Home & "/.switch/Backup/prod.keys.bak" & Year(Now) & Month(Now) & Day(Now) & Hour(Now) & Minute(Now))
+    Else
+      Copy ButtonBox2.Text & "//switch/prod.keys" To User.Home & "//.switch/prod.keys"
+    Endif
+    If Exist(User.Home & "//.switch/title.keys") Then
+      Move User.Home & "//.switch/title.keys" To User.Home & "//.switch/Backup/title.keys.bak" & Year(Now) & Month(Now) & Day(Now) & Hour(Now) & Minute(Now)
+      Copy ButtonBox2.Text & "//switch/title.keys" To User.Home & "//.switch/title.keys"
+      Message.Info("the old Keys was Moved to " & User.Home & "/.switch/Backup/title.keys.bak" & Year(Now) & Month(Now) & Day(Now) & Hour(Now) & Minute(Now))
+    Else
+      Copy ButtonBox2.Text & "//switch/title.keys" To User.Home & "//.switch/title.keys"
+    Endif
+    
+    Keys = File.Load(User.Home & "//.switch/prod.keys")
+    Keysa = Split(Keys, "= " & gb.NewLine, "", True)
+    
+    TextBox1.Text = Keysa[1 + Keysa.Find("sd_seed")]
+    TextBox1.ReadOnly = True
+    
+    ButtonBox1.Text = ButtonBox2.Text
+    Button4.Text = "Saved!"
+    Button4.Foreground = Color.Green
+    
+    If Not Exist(User.Home &/ ".switch" &/ "hactool") Then 
+      Copy "./hactool" To User.Home &/ ".switch" &/ "hactool"
+      Chmod User.Home &/ ".switch" &/ "hactool" To "rwxr-xr-x"
+    Endif
+    
+  Else
+    
+    Message.Error("Can not find '" & ButtonBox2.Text & "/switch/prod.keys' or " & ButtonBox2.Text & "/switch/title.keys'", "Ok")
+    
+    Button4.Text = "Failed!"
+    Button4.Foreground = Color.Red
+    
+  Endif
+  
+End
+
+Public Sub SDCardPath_Click()
+  
+  Dialog.Path = "/media"
+  If Dialog.SelectDirectory() Then
+    
+  Else
+    Last.Text = Dialog.Path
+  Endif
+  
+End
+
+Public Sub Form_Open()
+  
+  $hProcess = Exec ["bash", "--noediting"] For Input Output As "Process"
+  If Exist(User.Home &/ ".switch/Extract/Pokken/romfs/NX/text/master/resident_tlt.drp") Then
+    Me.Close()
+    FMain.Show()
+    
+    $Extract = False
+    Return
+  Endif
+  If Exist(User.Home &/ ".switch/PokkenBase.nca") And Exist(User.Home &/ ".switch/PokkenUpdate.nca") Then
+    If Stat(User.Home &/ ".switch/PokkenBase.nca").Size == 3500179456 And Stat(User.Home &/ ".switch/PokkenUpdate.nca").Size == 744893952 Then
+      If Message.Question("You has already a Decrypted Pokken NCA Please Extract. Or will you refresh the data?", "Continue", "Refresh") = 1
+        Button3.Enabled = False
+        LPathToBase.Text = User.Home &/ ".switch/PokkenBase.nca"
+        LPathToUp.Text = User.Home &/ ".switch/PokkenUpdate.nca"
+        ButtonBox1.Text = "Not needed"
+        ButtonBox1.Enabled = False
+        ButtonBox2.Text = "Not needed"
+        ButtonBox2.Enabled = False
+        Button4.Enabled = False
+        TextBox1.Enabled = False
+        TextBox1.Text = "Not needed"
+        Wizard1.Index = 2
+        ButtonBox3.Text = User.Home &/ ".switch/PokkenBase.nca"
+        ButtonBox3.ReadOnly = True
+        ButtonBox4.Text = User.Home &/ ".switch/PokkenUpdate.nca"
+        ButtonBox4.ReadOnly = True
+        ncaValid()
+      Endif
+    Endif
+  Endif
+  Try Label10.Text = File.Load(User.Home &/ ".switch/hactoolVersion")
+  If Error Then
+    Label10.Text = File.Load("./hactoolVersion")
+  Endif
+  
+End
+
+Public Sub Process_Kill()
+  
+  Message.Error("Bash is Crashed!!")
+  
+End
+
+Public Sub Button3_Click()
+  
+  Dim ContendRootDir As String
+  Dim sHexDir As String
+  Dim sNcaFile As String
+  Dim stest As String[]
+  Dim sDir As String
+  Dim FoundUp As Boolean
+  Dim FoundBase As Boolean
+  Dim scmd As String
+  
+  Try Kill User.Home &/ ".switch" &/ "PokkenUpdate.nca"
+  ContendRootDir = ButtonBox1.Text &/ "/Nintendo/Contents/registered"
+  For Each sDir In Dir(ContendRootDir, "", gb.Directory)
+    Debug sDir
+    For Each sHexDir In Dir(ContendRootDir &/ sDir, "", gb.Directory)
+      Debug sHexDir
+      For Each sNcaFile In Dir(ContendRootDir &/ sDir &/ sHexDir)
+        Debug sNcaFile
+        Shell User.Home &/ ".switch" &/ "hactool -tnax0 --sdpath=/registered" &/ sdir &/ sHexDir & " --sdseed=" & TextBox1.Text & " " & ContendRootDir &/ sDir &/ sHexDir &/ sNcaFile & " > /tmp/test.txt 2> error.txt" Wait 
+        
+        stest = Split(File.Load("/tmp/test.txt"), ": " & gb.NewLine, "", True)
+        If stest.Find(ContendSize) >= 0 Then
+          LPathToBase.Text = sHexDir & " ✓"
+          ' Message.Info("Found The Pokken Base Data Making now the NCA\n Path:" & ContendRootDir &/ sDir &/ sHexDir, "Ok")
+          scmd = User.Home &/ ".switch" &/ "hactool -tnax0 --plaintext=" & User.Home &/ ".switch" &/ "PokkenBase.nca" & " --sdpath=/registered" &/ sdir &/ sHexDir & " --sdseed=" & TextBox1.Text & " " & ContendRootDir &/ sDir &/ sHexDir &/ sNcaFile & gb.newLine
+          scmd = Conv$(scmd, Desktop.Charset, System.Charset)
+          Print #$hProcess, scmd;
+          FoundBase = True
+          
+        Endif
+        If stest.Find(UpdateContnedSize) >= 0 Then
+          LPathToUp.Text = sHexDir & " ✓"
+          ' Message.Info("Found The Pokken Update Base Data Making now the NCA\n Path:" & ContendRootDir &/ sDir &/ sHexDir, "Ok")
+          scmd = User.Home &/ ".switch" &/ "hactool -tnax0 --plaintext=" & User.Home &/ ".switch" &/ "PokkenUpdate.nca" & " --sdpath=/registered" &/ sdir &/ sHexDir & " --sdseed=" & TextBox1.Text & " " & ContendRootDir &/ sDir &/ sHexDir &/ sNcaFile & gb.NewLine
+          scmd = Conv$(scmd, Desktop.Charset, System.Charset)
+          Print #$hProcess, scmd;
+          FoundUp = True
+          
+        Endif
+        Break
+        
+      Next
+      If FoundBase And FoundUp Then
+        Break
+      Endif
+    Next
+    If FoundBase And FoundUp Then
+      Fwait.OpenMe(3500179456, "Pokken Base Decrypt to NCA", User.Home &/ ".switch" &/ "PokkenBase.nca", 744893952, "Pokken Update Decrypt to NCA", User.Home &/ ".switch" &/ "PokkenUpdate.nca")
+      ButtonBox3.Text = User.Home &/ ".switch" &/ "PokkenBase.nca"
+      ButtonBox4.Text = User.Home &/ ".switch" &/ "PokkenUpdate.nca"
+      Break
+    Endif
+  Next
+  
+End
+
+Public Sub Button1_Click()
+  
+  Fwait.Show()
+  
+  Message.Info("Updating now Hactool")
+  
+  send("git clone https://github.com/SciresM/hactool /tmp/hactool")
+  send("mv /tmp/hactool/config.mk.template /tmp/hactool/config.mk")
+  send("make -C /tmp/hactool/")
+  Try Kill User.Home &/ ".switch" &/ "hactool"
+  
+  send("cp /tmp/hactool/hactool " & User.Home &/ ".switch" &/ "hactool")
+  send("chmod +x " & User.Home &/ ".switch" &/ "hactool")
+  File.Save(User.home &/ ".switch/hactoolVersion", "Built: " & Time(Now) & " | " & Month(Now) & " " & Day(Now) & " " & Year(Now)) 
+  send("rm -r -f /tmp/hactool")
+  $Update = True
+  timer1.start()
+  
+End
+
+Public Sub send(cmd As String)
+  
+  cmd &= gb.NewLine
+  ' cmd = Conv$(cmd + gb.NewLine, Desktop.Charset, System.Charset)
+  Print #$hProcess, cmd;
+  
+End
+
+Public Sub Process_Error(sStr As String)
+  
+  Message.Error(sStr, "Ok")
+  
+End
+
+Public Sub Process_Read()
+  
+  Dim sStr As String
+  
+  Read #$hProcess, sStr, -256
+  
+  Print sStr
+  
+End
+
+Public Sub timer1_Timer()
+  
+  If $Update Then 
+    If Exist(User.Home &/ ".switch" &/ "hactool") Then
+      timer1.Stop
+      $Update = False
+      Fwait.Close
+      Form_Open()
+    Endif
+  Endif
+  
+  If $Extract Then
+    If Exist(User.Home &/ ".switch/Extract/Pokken/romfs/NX/text/master/resident_tlt.drp") Then
+      Fwait.Close()
+      timer1.Stop()
+      $Extract = False
+      Message.Info("The Extraction is Finish the Main Part of the Programm is starting up")
+    Endif
+  Endif
+  
+End
+
+Public Sub Wizard1_Cancel()
+  
+  If Message.Question("Will you cancel the finding process for the Pokken Data?", "Yes", "No") = 1 Then
+    Me.Close()
+    If $firstrun Then Quit
+  Endif
+  
+End
+
+Public Sub ButtonBox3_Click()
+  
+  Dialog.Path = User.Home
+  If Dialog.OpenFile() Then
+    
+  Else
+    ButtonBox3.Text = Dialog.Path
+  Endif
+  ncaValid()
+  
+End
+
+Public Sub ncaValid()
+  
+  send(User.home &/ ".switch/hactool " & ButtonBox3.Text & " >/tmp/test.txt")
+  Wait 0.5
+  If Split(File.Load("/tmp/test.txt"), ": " & gb.NewLine, "", True).Find("0100b3f000be2000") > -1 Then
+    
+    $BaseValid = True
+  Else
+    ButtonBox3.Foreground = Color.Red
+    Message.Error("The Path: " & ButtonBox3.Text & " is not a Pokken NCA!")
+    
+  Endif
+  
+  send(User.home &/ ".switch/hactool " & ButtonBox4.Text & " >/tmp/test.txt")
+  Wait 0.5
+  If Split(File.Load("/tmp/test.txt"), ": " & gb.NewLine, "", True).Find("0100b3f000be2000") > -1 Then
+    
+    $UpValid = True
+  Else
+    ButtonBox4.Foreground = Color.Red
+    Message.Error("The Path: " & ButtonBox4.Text & " is not a Pokken NCA!")
+    
+  Endif
+  
+  If $BaseValid And $UpValid Then 
+    CheckBox1.Value = True
+  Else
+    CheckBox1.Value = False
+  Endif  
+  
+End
+
+Public Sub ButtonBox4_Click()
+  
+  Dialog.Path = User.Home
+  If Dialog.OpenFile() Then
+    
+  Else
+    ButtonBox4.Text = Dialog.Path
+    
+  Endif  
+  ncaValid()
+  
+End
+
+Public Sub CheckBox1_Click()
+  
+  ncaValid()
+  
+End
+
+Public Sub Wizard1_Close()
+  
+  If Not Exist(User.Home &/ ".switch/Extract/") Then Mkdir User.Home &/ ".switch/Extract/"
+  If Not Exist(User.Home &/ ".switch/Extract/Pokken/") Then Mkdir User.Home &/ ".switch/Extract/Pokken/"
+  send(User.Home &/ ".switch/hactool -x --basenca " & User.Home &/ ".switch/PokkenBase.nca --romfsdir=" & User.Home &/ ".switch/Extract/Pokken/romfs --exefsdir=" & User.Home &/ ".switch/Extract/Pokken/exefs " & User.home &/ ".switch/PokkenUpdate.nca")
+  Fwait.Show()
+  $Extract = True
+  Timer1.Start()
+  
+End
+
+Public Sub form_Close()
+  
+  Try $hProcess.Kill()
+  
+End

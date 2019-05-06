@@ -1,0 +1,61 @@
+' Gambas class file
+
+Private $LSize As Long
+Private $sPath As String
+Private $sPath2 As String
+Private $LSize2 As Long
+
+Public Sub OpenMe(SizeToClose As Long, txt As String, PathToData As String, SizeToClose2 As Long, txt2 As String, PathToData2 As String)
+  
+  Dim hform As Fwait
+  
+  FStart.Enabled = False
+  hform = New Fwait
+  hform.Show
+  hform.SetFocus()
+  hform.Set(SizeToClose, txt, PathToData, SizeToClose2, txt2, PathToData2)
+  
+End
+
+Public Sub Timer1_Timer()
+  
+  Try ProgressBar1.Value = CFloat(Stat($sPath).Size / $LSize)
+  If Error Then ProgressBar1.Value = 0
+  
+  Try ProgressBar2.Value = CFloat(Stat($sPath2).Size / $LSize2)
+  If Error Then ProgressBar2.Value = 0
+  
+  If ProgressBar1.Value = 1.0 And ProgressBar2.Value = 1.0 Then 
+    FStart.Enabled = True
+    Me.Close
+  Else 
+    FStart.Enabled = False
+  Endif
+  LCDLabel1.Text = CString(Time(Now))
+  
+End
+
+Public Sub Set(sizeToClose As Long, txt As String, PathToData As String, SizeToClose2 As Long, txt2 As String, PathToData2 As String)
+  
+  ProgressBar1.Visible = True
+  ProgressBar2.Visible = True
+  LCDLabel1.Visible = False
+  Spinner1.Start()
+  Ltxt.text = txt
+  $LSize = sizeToClose
+  $sPath = PathToData
+  
+  Label1.text = txt2
+  $LSize2 = sizeToClose2
+  $sPath2 = PathToData2
+  Timer1.start()
+  
+End
+
+Public Sub Form_Open()
+  
+  Spinner1.Start
+  Ltxt.Text = "started: " & Time(Now)
+  Timer1.Start()
+  
+End
