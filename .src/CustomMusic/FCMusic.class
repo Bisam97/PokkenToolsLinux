@@ -56,10 +56,10 @@ Public Sub Button2_Click()
   Print #$Process, Chr$(3);
   Print #$Process, "cd /tmp" & gb.NewLine
   If File.Ext(ButtonBox1.Text) = "wav"
-    Print #$Process, "cp '" & File.Dir(ButtonBox1.Text) &/ File.BaseName(ButtonBox1.Text) & ".wav' /tmp/out.wav" & gb.NewLine
+    Print #$Process, "cp " & Chr$(34) & File.Dir(ButtonBox1.Text) &/ File.BaseName(ButtonBox1.Text) & ".wav" & Chr$(34) & " /tmp/out.wav" & gb.NewLine
   Else
-    Print #$Process, "soundconverter -b -m 'audio/x-wav' -s '.wav' '" & ButtonBox1.Text & "'" & gb.NewLine
-    Print #$Process, "mv '" & File.Dir(ButtonBox1.Text) &/ File.BaseName(ButtonBox1.Text) & ".wav' /tmp/out.wav" & gb.NewLine
+    Print #$Process, "soundconverter -b -m 'audio/x-wav' -s '.wav' " & Chr$(34) & ButtonBox1.Text & Chr$(34) & gb.NewLine
+    Print #$Process, "mv " & Chr$(34) & File.Dir(ButtonBox1.Text) &/ File.BaseName(ButtonBox1.Text) & ".wav" & Chr$(34) & " /tmp/out.wav" & gb.NewLine
     
   Endif
   
@@ -85,7 +85,10 @@ Public Sub Button3_Click()
   Print #$Process, "mkdir /tmp/insert" & gb.NewLine
   Print #$Process, "cp '" & ButtonBox1.Text & "' /tmp/insert/in." & File.Ext(ButtonBox1.Text) & gb.NewLine
   Print #$Process, "cp '" & $origMusicPath &/ ButtonBox2.Text & "' /tmp/insert/" & gb.NewLine
-  Print #$Process, "soundconverter -b -m 'audio/x-wav' -s '.wav' '/tmp/insert/in." & File.Ext(ButtonBox1.Text) & "'" & gb.NewLine
+  If File.Ext(ButtonBox1.Text) = "wav" 
+  Else
+    Print #$Process, "soundconverter -b -m 'audio/x-wav' -s '.wav' '/tmp/insert/in." & File.Ext(ButtonBox1.Text) & "'" & gb.NewLine
+  Endif
   Print #$Process, "dotnet /usr/lib/pokkentools/VGAudio/VGAudioCli.dll /tmp/insert/in.wav /tmp/insert/in.idsp" & gb.NewLine
   Print #$Process, "python /usr/lib/pokkentools/nus3bank/nus3inject.py /tmp/insert/" & ButtonBox2.Text & " /tmp/insert/in.idsp" & " 0x0" & gb.NewLine
   Print #$Process, "cp /tmp/insert/" & ButtonBox2.Text & " " & $musicModdingPath & gb.NewLine

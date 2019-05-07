@@ -146,13 +146,13 @@ Public Sub Button3_Click()
       Debug sHexDir
       For Each sNcaFile In Dir(ContendRootDir &/ sDir &/ sHexDir)
         Debug sNcaFile
-        Shell User.Home &/ ".switch" &/ "hactool -tnax0 --sdpath=/registered" &/ sdir &/ sHexDir & " --sdseed=" & TextBox1.Text & " " & ContendRootDir &/ sDir &/ sHexDir &/ sNcaFile & " > /tmp/test.txt 2> error.txt" Wait 
+        Shell "/usr/lib/pokkentools/hactool/hactool -tnax0 --sdpath=/registered" &/ sdir &/ sHexDir & " --sdseed=" & TextBox1.Text & " " & ContendRootDir &/ sDir &/ sHexDir &/ sNcaFile & " > /tmp/test.txt 2> error.txt" Wait 
         
         stest = Split(File.Load("/tmp/test.txt"), ": " & gb.NewLine, "", True)
         If stest.Find(ContendSize) >= 0 Then
           LPathToBase.Text = sHexDir & " ✓"
           ' Message.Info("Found The Pokken Base Data Making now the NCA\n Path:" & ContendRootDir &/ sDir &/ sHexDir, "Ok")
-          scmd = User.Home &/ ".switch" &/ "hactool -tnax0 --plaintext=" & User.Home &/ ".switch" &/ "PokkenBase.nca" & " --sdpath=/registered" &/ sdir &/ sHexDir & " --sdseed=" & TextBox1.Text & " " & ContendRootDir &/ sDir &/ sHexDir &/ sNcaFile & gb.newLine
+          scmd = "/usr/lib/pokkentools/hactool/hactool -tnax0 --plaintext=" & User.Home &/ ".switch" &/ "PokkenBase.nca" & " --sdpath=/registered" &/ sdir &/ sHexDir & " --sdseed=" & TextBox1.Text & " " & ContendRootDir &/ sDir &/ sHexDir &/ sNcaFile & gb.newLine
           scmd = Conv$(scmd, Desktop.Charset, System.Charset)
           Print #$hProcess, scmd;
           FoundBase = True
@@ -161,7 +161,7 @@ Public Sub Button3_Click()
         If stest.Find(UpdateContnedSize) >= 0 Then
           LPathToUp.Text = sHexDir & " ✓"
           ' Message.Info("Found The Pokken Update Base Data Making now the NCA\n Path:" & ContendRootDir &/ sDir &/ sHexDir, "Ok")
-          scmd = User.Home &/ ".switch" &/ "hactool -tnax0 --plaintext=" & User.Home &/ ".switch" &/ "PokkenUpdate.nca" & " --sdpath=/registered" &/ sdir &/ sHexDir & " --sdseed=" & TextBox1.Text & " " & ContendRootDir &/ sDir &/ sHexDir &/ sNcaFile & gb.NewLine
+          scmd = "/usr/lib/pokkentools/hactool/hactool -tnax0 --plaintext=" & User.Home &/ ".switch" &/ "PokkenUpdate.nca" & " --sdpath=/registered" &/ sdir &/ sHexDir & " --sdseed=" & TextBox1.Text & " " & ContendRootDir &/ sDir &/ sHexDir &/ sNcaFile & gb.NewLine
           scmd = Conv$(scmd, Desktop.Charset, System.Charset)
           Print #$hProcess, scmd;
           FoundUp = True
@@ -245,6 +245,8 @@ Public Sub timer1_Timer()
       timer1.Stop()
       $Extract = False
       Message.Info("The Extraction is Finish the Main Part of the Programm is starting up")
+      Me.Close
+      FMain.Show()
     Endif
   Endif
   
@@ -273,7 +275,7 @@ End
 
 Public Sub ncaValid()
   
-  send(User.home &/ ".switch/hactool " & ButtonBox3.Text & " >/tmp/test.txt")
+  send("/usr/lib/pokkentools/hactool/hactool " & ButtonBox3.Text & " >/tmp/test.txt")
   Wait 0.5
   If Split(File.Load("/tmp/test.txt"), ": " & gb.NewLine, "", True).Find("0100b3f000be2000") > -1 Then
     
@@ -284,7 +286,7 @@ Public Sub ncaValid()
     
   Endif
   
-  send(User.home &/ ".switch/hactool " & ButtonBox4.Text & " >/tmp/test.txt")
+  send("/usr/lib/pokkentools/hactool/hactool " & ButtonBox4.Text & " >/tmp/test.txt")
   Wait 0.5
   If Split(File.Load("/tmp/test.txt"), ": " & gb.NewLine, "", True).Find("0100b3f000be2000") > -1 Then
     
