@@ -1,10 +1,14 @@
 # PokkenToolsLinux
 This is a tool for Linux users with which you can modding Pokken Tournament.
 
-# Features
+# Features 
 Find the Pokken data on your SD-Card (If Pokken installt on the SD-Card)   
-Decypt the Pokken Data to a NCA File and Extract(inclusiv Update)  
+Decypt the Pokken Data to a NCA File and Extract (inclusiv Update)  
 Music modding  
+
+# Install the Mod
+The Finish files are Stored in `/home/YOUR HOME/.switch/Modding/Pokken` copy the Folder with `0100b3f000be2000` on your SD-Card in the `/atmosphere/titles/` folder.  
+If you have ReiNX  then it's the folder `/ReiNX/title`  
 
 # Planned Features
 Texture Modding  
