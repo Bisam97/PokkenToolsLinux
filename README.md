@@ -29,7 +29,7 @@ Thanks to ICON for Wiidatabase.de a nice Nintendo Homebrew News site.
 # Licence
 The Protjekt is under GPLv2.
 
-All tools have their license in the folder
-Hactool is under ISC Licence
-VGAudio is under MIT Licence
-nus3bank is under GPLv2
+All tools have their license in the folder  
+Hactool is under ISC Licence  
+VGAudio is under MIT Licence  
+nus3bank is under GPLv2  
