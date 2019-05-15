@@ -55,11 +55,13 @@ Public Sub Button2_Click()
   Button2.Tooltip = "Converting to Wav"
   Print #$Process, Chr$(3);
   Print #$Process, "cd /tmp" & gb.NewLine
+  Try Kill "/tmp/musik." & File.Ext(ButtonBox1.Text)
+  Copy File.Dir(ButtonBox1.Text) &/ File.Name(ButtonBox1.Text) To "/tmp/musik." & File.Ext(ButtonBox1.Text)
   If File.Ext(ButtonBox1.Text) = "wav"
-    Print #$Process, "cp " & Chr$(34) & File.Dir(ButtonBox1.Text) &/ File.BaseName(ButtonBox1.Text) & ".wav" & Chr$(34) & " /tmp/out.wav" & gb.NewLine
+    Print #$Process, "mv " & Chr$(34) & "/tmp/musik.wav" & Chr$(34) & " /tmp/out.wav" & gb.NewLine
   Else
-    Print #$Process, "soundconverter -b -m 'audio/x-wav' -s '.wav' " & Chr$(34) & ButtonBox1.Text & Chr$(34) & gb.NewLine
-    Print #$Process, "mv " & Chr$(34) & File.Dir(ButtonBox1.Text) &/ File.BaseName(ButtonBox1.Text) & ".wav" & Chr$(34) & " /tmp/out.wav" & gb.NewLine
+    Print #$Process, "soundconverter -b -m 'audio/x-wav' -s '.wav' " & Chr$(34) & "/tmp/musik." & File.Ext(ButtonBox1.Text) & Chr$(34) & gb.NewLine
+    Print #$Process, "mv " & Chr$(34) & "/tmp/musik.wav" & Chr$(34) & " /tmp/out.wav" & gb.NewLine
     
   Endif
   
@@ -80,10 +82,18 @@ End
 
 Public Sub Button3_Click()
   
+  Fwait.Show()
+  If Exist($musicModdingPath &/ ButtonBox2.Text) Then
+    Kill $musicModdingPath &/ ButtonBox2.Text
+  Endif
+  Timer1.Start()
   Print #$Process, Chr$(3) & gb.NewLine
   Print #$Process, "rm -r /tmp/insert" & gb.NewLine
   Print #$Process, "mkdir /tmp/insert" & gb.NewLine
-  Print #$Process, "cp '" & ButtonBox1.Text & "' /tmp/insert/in." & File.Ext(ButtonBox1.Text) & gb.NewLine
+  
+  Wait 0.2
+  Copy ButtonBox1.Text To "/tmp/insert/in." & File.Ext(ButtonBox1.Text)
+  
   Print #$Process, "cp '" & $origMusicPath &/ ButtonBox2.Text & "' /tmp/insert/" & gb.NewLine
   If File.Ext(ButtonBox1.Text) = "wav" 
   Else
@@ -92,5 +102,15 @@ Public Sub Button3_Click()
   Print #$Process, "dotnet /usr/lib/pokkentools/VGAudio/VGAudioCli.dll /tmp/insert/in.wav /tmp/insert/in.idsp" & gb.NewLine
   Print #$Process, "python /usr/lib/pokkentools/nus3bank/nus3inject.py /tmp/insert/" & ButtonBox2.Text & " /tmp/insert/in.idsp" & " 0x0" & gb.NewLine
   Print #$Process, "cp /tmp/insert/" & ButtonBox2.Text & " " & $musicModdingPath & gb.NewLine
+  
+End
+
+Public Sub Timer1_Timer()
+  
+  If Exist($musicModdingPath &/ ButtonBox2.Text) Then
+    Fwait.Close()
+    Timer1.Stop
+    Label4.Text = "successfully!"
+  Endif
   
 End

@@ -38,4 +38,7 @@
     Font = Font["+3"]
     Foreground = &H47C065&
   }
+  { Timer1 #Timer
+    #MoveScaled(62,34)
+  }
 }
