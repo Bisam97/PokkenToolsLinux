@@ -84,6 +84,7 @@ End
 
 Public Sub Form_Open()
   
+  If Not Exist(User.Home & "/.switch") Then Mkdir User.Home & "/.switch"
   $hProcess = Exec ["bash", "--noediting"] For Input Output As "Process"
   If Exist(User.Home &/ ".switch/Extract/Pokken/romfs/NX/text/master/resident_tlt.drp") Then
     Me.Close()
