@@ -236,7 +236,8 @@ Public Sub timer1_Timer()
       timer1.Stop
       $Update = False
       Fwait.Close
-      Form_Open()
+      FStart.Close
+      FStart.Show
     Endif
   Endif
   
