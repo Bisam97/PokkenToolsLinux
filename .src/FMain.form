@@ -16,4 +16,8 @@
   { Panel1 Panel
     MoveScaled(18,52,72,41)
   }
+  { Button2 Button
+    MoveScaled(2,89,16,4)
+    Text = ("Open Mod Dir")
+  }
 }

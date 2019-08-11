@@ -17,5 +17,5 @@ Systems=autotools,ubuntu
 Menus=ubuntu:"Applications/Editors"
 Categories=ubuntu:"Game"
 Groups=ubuntu:"misc"
-ExtraDependencies=ubuntu:"soundconverter\t3.0.0\t\naspnetcore-runtime-2.2\t\t"
+ExtraDependencies=ubuntu:"soundconverter\t2.99\t\naspnetcore-runtime-2.2\t\t"
 ExtraFiles=ubuntu:"lib/hactool/hactool\t/usr/lib/pokkentools/hactool\nlib/hactool/LICENSE\t/usr/lib/pokkentools/hactool\nlib/nus3bank/LICENSE\t/usr/lib/pokkentools/nus3bank\nlib/nus3bank/nus3bank.py\t/usr/lib/pokkentools/nus3bank\nlib/nus3bank/nus3inject.py\t/usr/lib/pokkentools/nus3bank\nlib/nus3bank/util.py\t/usr/lib/pokkentools/nus3bank\nlib/nus3bank/util.pyc\t/usr/lib/pokkentools/nus3bank\nlib/VGAudio/LICENSE\t/usr/lib/pokkentools/VGAudio\nlib/VGAudio/VGAudio.dll\t/usr/lib/pokkentools/VGAudio\nlib/VGAudio/VGAudioCli.deps.json\t/usr/lib/pokkentools/VGAudio\nlib/VGAudio/VGAudioCli.dll\t/usr/lib/pokkentools/VGAudio\nlib/VGAudio/VGAudioCli.runtimeconfig.json\t/usr/lib/pokkentools/VGAudio\nlib/VGAudio/VGAudioTools.deps.json\t/usr/lib/pokkentools/VGAudio\nlib/VGAudio/VGAudioTools.dll\t/usr/lib/pokkentools/VGAudio\nlib/VGAudio/VGAudioTools.runtimeconfig.json\t/usr/lib/pokkentools/VGAudio"

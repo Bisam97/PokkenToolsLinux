@@ -164,3 +164,10 @@ Public Sub Form_Close()
   $Process.Kill()
   
 End
+
+Public Sub Button2_Click()
+  
+  Message.Info("Please put this directory In your titelFS Mod directory")
+  Desktop.Open($moddingDir &/ "..")
+  
+End
