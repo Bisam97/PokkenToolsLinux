@@ -116,7 +116,7 @@ Public Sub Form_Open()
   Endif
   Try Label10.Text = File.Load(User.Home &/ ".switch/hactoolVersion")
   If Error Then
-    Label10.Text = File.Load("./hactoolVersion")
+    Label10.Text = "No hactool Installed"
   Endif
   
 End
