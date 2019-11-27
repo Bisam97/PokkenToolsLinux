@@ -10,9 +10,9 @@ Private $origPathFs As String
 'Gambas class file
 
 Public Sub Form_Open()
-  
+
   $Process = Exec ["bash", "--noediting"] For Input Output As "Process"
-  
+
   TreeView1.Add("NX", "NX", Picture["icon:/16/directory"], "", "")
   TreeView1.Add("2d", "2d", Picture["icon:/16/directory"], "NX")
   TreeView1.Add("font", "font", Picture["icon:/16/directory"], "NX", "2d")
@@ -22,15 +22,15 @@ Public Sub Form_Open()
   TreeView1.Add("shader", "shader", Picture["icon:/16/directory"], "NX", "resource")
   TreeView1.Add("sound", "sound", Picture["icon:/16/directory"], "NX", "shader")
   TreeView1.Add("text", "text", Picture["icon:/16/directory"], "NX", "sound")
-  
+
   TreeView1.Add("avatar", "avatar", Picture["icon:/16/directory"], "2d")
   TreeView1.Add("master1", "master", Picture["icon:/16/directory"], "avatar")
-  
+
   TreeView1.Add("avatar_thumbnail", "avatar_thumbnail", Picture["icon:/16/directory"], "2d")
   TreeView1.Add("master2", "master", Picture["icon:/16/directory"], "avatar_thumbnail")
-  
+
   TreeView1.Add("master3", "master", Picture["icon:/16/directory"], "movie")
-  
+
   TreeView1.Add("chrind", "chrind", Picture["icon:/16/directory"], "packdata")
   TreeView1.Add("adhoc", "adhoc", Picture["icon:/16/directory"], "packdata")
   TreeView1.Add("league", "league", Picture["icon:/16/directory"], "packdata")
@@ -72,7 +72,7 @@ Public Sub Form_Open()
   TreeView1.Add("chr_sprite", "chr_sprite", Picture["icon:/16/directory"], "packdata")
   TreeView1.Add("skit", "skit", Picture["icon:/16/directory"], "packdata")
   TreeView1.Add("vs_image", "vs_image", Picture["icon:/16/directory"], "packdata")
-  
+
   TreeView1.Add("master4", "master", Picture["icon:/16/directory"], "chrind")
   TreeView1.Add("master5", "master", Picture["icon:/16/directory"], "adhoc")
   TreeView1.Add("master6", "master", Picture["icon:/16/directory"], "league")
@@ -114,60 +114,84 @@ Public Sub Form_Open()
   TreeView1.Add("master42", "master", Picture["icon:/16/directory"], "chr_sprite")
   TreeView1.Add("master43", "master", Picture["icon:/16/directory"], "skit")
   TreeView1.Add("master44", "master", Picture["icon:/16/directory"], "vs_image")
-  
+
   TreeView1.Add("master45", "master", Picture["icon:/16/directory"], "sound")
   TreeView1.Add("master46", "master", Picture["icon:/16/directory"], "text")
-  
+
   $origPathFs = User.Home &/ ".switch/Extract/Pokken/romfs"
-  
+
   If Not Exist(User.Home &/ ".switch/Modding") Then Mkdir User.Home &/ ".switch/Modding"
   If Not Exist(User.Home &/ ".switch/Modding/Pokken") Then Mkdir User.Home &/ ".switch/Modding/Pokken"
   If Not Exist(User.Home &/ ".switch/Modding/Pokken/0100b3f000be2000") Then Mkdir User.Home &/ ".switch/Modding/Pokken/0100b3f000be2000"
-  
+
   $moddingDir = User.Home &/ ".switch/Modding/Pokken/0100b3f000be2000"
   $moddingdirRomfs = User.Home &/ ".switch/Modding/Pokken/0100b3f000be2000/romfs"
-  
+
   If Not Exist($moddingdirRomfs) Then Mkdir $moddingdirRomfs
   If Not Exist($moddingdirRomfs &/ "NX") Then Mkdir $moddingdirRomfs &/ "NX"
   If Not Exist($moddingdirRomfs &/ "NX/sound") Then Mkdir $moddingdirRomfs &/ "NX/sound"
   If Not Exist($moddingdirRomfs &/ "NX/sound/master") Then Mkdir $moddingdirRomfs &/ "NX/sound/master"
-  
+
   $musicModdingDir = $moddingdirRomfs &/ "NX/sound/master"
-  
+
 End
 
 Public Sub Button1_Click()
-  
+
+  Try $hpanleMForm.Close
   $hpanleMForm = New FCMusic($origPathFs, $musicModdingDir, Panel1)
   $hpanleMForm.getP($Process)
-  
+
 End
 
 Public Sub Process_Read()
-  
+
   Dim sStr As String
-  
+
   Read #$Process, sStr, -256
-  
+
   Print sStr
-  
+
 End
 
 Public Sub Process_Error(sStr As String)
-  
+
   Message.Error(sStr, "Ok")
-  
+
 End
 
 Public Sub Form_Close()
-  
+
   $Process.Kill()
-  
+
 End
 
 Public Sub Button2_Click()
-  
+
   Message.Info("Please put this directory In your titelFS Mod directory")
   Desktop.Open($moddingDir &/ "..")
-  
+
+End
+
+Public Sub TreeView1_DblClick()
+
+  Dim s As String
+
+  ListView1.Clear
+  For Each s In Dir($moddingdirRomfs & "/NX/" & TreeView1.Current.ParentKey &/ TreeView1.Current.Text)
+
+    ListView1.Add(s, s)
+
+  Next
+Catch
+  Print Error.Text
+
+End
+
+Public Sub Button3_Click()
+
+  Try $hpanleMForm.Close
+  $hpanleMForm = New FCVoice($origPathFs, $musicModdingDir, Panel1)
+  $hpanleMForm.getP($Process)
+
 End

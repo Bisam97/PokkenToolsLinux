@@ -4,84 +4,133 @@ Private $Process As Process
 Private $origPathRomFs As String
 Private $musicModdingPath As String
 Private $origMusicPath As String
+Private $CMusik As Boolean
+Private $Channel As Channel
+Private $Sound As Sound
+Private $isplaying As Boolean
+Private $observer As Observer
 
 Public Sub ButtonBox2_Click()
-  
+
   FMusicFileList.LookmeUp(Me)
-  
+
 End
 
 Public Sub _new(origPathRomFs As String, musicModdingPath As String)
-  
+
   $origPathRomFs = origPathRomFs
   $origMusicPath = origPathRomFs &/ "NX/sound/master"
-  
+  $CMusik = True
   $musicModdingPath = musicModdingPath
-  
+
 End
 
 Public Sub Button1_Click()
-  
-  Try Kill "/tmp/out.wav"
-  Debug "out.wav is dead"
-  Print #$Process, Chr$(3);
-  Print #$Process, gb.NewLine;
-  Debug "Process is empty"
-  If Exist($origMusicPath &/ ButtonBox2.Text) Then
-    
-    Debug "cmd send"
-    Print #$Process, "python /usr/lib/pokkentools/nus3bank/nus3bank.py " & $origMusicPath &/ ButtonBox2.Text & " /tmp/out" & gb.NewLine;
-    Print #$Process, "dotnet /usr/lib/pokkentools/VGAudio/VGAudioCli.dll /tmp/out/0x0-" & File.BaseName($origMusicPath &/ ButtonBox2.Text) & ".idsp /tmp/out.wav" & gb.NewLine;
-    Print #$Process, "aplay /tmp/out.wav" & gb.NewLine;
-    Debug "wait"
+
+  If $isplaying Then
+    StopPlaying()
+  Else
+    Try Kill "/tmp/out.wav"
+    Debug "out.wav is dead"
+
+    Print #$Process, Chr$(3);
+    Print #$Process, gb.NewLine;
+    Debug "Process is empty"
+    If Exist($origMusicPath &/ ButtonBox2.Text) Then
+
+      Debug "cmd send"
+      Print #$Process, "python /usr/lib/pokkentools/nus3bank/nus3bank.py " & $origMusicPath &/ ButtonBox2.Text & " /tmp/out" & gb.NewLine;
+      Print #$Process, "dotnet /usr/lib/pokkentools/VGAudio/VGAudioCli.dll /tmp/out/0x0-" & File.BaseName($origMusicPath &/ ButtonBox2.Text) & ".idsp /tmp/out.wav" & gb.NewLine;
+      ' Print #$Process, "aplay /tmp/out.wav" & gb.NewLine;
+    Endif
+    Print #$Process, "cat > /tmp/go.pokkenCM" & gb.NewLine;
+    While Not Exist("/tmp/go.pokkenCM")
+      Print "Not Exist"
+    Wend
+    Kill "/tmp/go.pokkenCM"
+    $Sound = Sound.Load("/tmp/out.wav")
+    $Channel = $Sound.Play(0, 0.2)
+
+    Button1.Text = "⬛"
+    $isplaying = True
   Endif
-  
+
 End
 
 Public Sub getP(Bash As Process)
-  
+
   $Process = Bash
-  
+
 End
 
 Public Sub Button2_Click()
-  
+
   ' MP3 audio / mpeg.mp3 verlustbehaftet, starke Komprimierung, weit verbreitet, patentbehaftet
   ' Ogg Vorbis audio / ogg.ogg, .oga verlustbehaftet, starke Komprimierung, mittelm äßig verbreitet, freie Software
   ' AAC audio / aac.m4a, .aac verlustbehaftet, starke Komprimierung, weit verbreitet(Apple, Sony, ...), patentbehaftet
   ' RIFF WAVE audio / x - wav.wav verlustfrei, schwache Komprimierung, weit verbreitet
-  ' FLAC audio / x - flac.flac verlustfrei, mittelm äßige Komprimierung, mittelmäßig verbreitet, freie Software 
-  
-  Button2.Tooltip = "Converting to Wav"
-  Print #$Process, Chr$(3);
-  Print #$Process, "cd /tmp" & gb.NewLine
-  Try Kill "/tmp/musik." & File.Ext(ButtonBox1.Text)
-  Copy File.Dir(ButtonBox1.Text) &/ File.Name(ButtonBox1.Text) To "/tmp/musik." & File.Ext(ButtonBox1.Text)
-  If File.Ext(ButtonBox1.Text) = "wav"
-    Print #$Process, "mv " & Chr$(34) & "/tmp/musik.wav" & Chr$(34) & " /tmp/out.wav" & gb.NewLine
+  ' FLAC audio / x - flac.flac verlustfrei, mittelm äßige Komprimierung, mittelmäßig verbreitet, freie Software
+  If $isplaying Then
+    StopPlaying()
   Else
-    Print #$Process, "soundconverter -b -m 'audio/x-wav' -s '.wav' " & Chr$(34) & "/tmp/musik." & File.Ext(ButtonBox1.Text) & Chr$(34) & gb.NewLine
-    Print #$Process, "mv " & Chr$(34) & "/tmp/musik.wav" & Chr$(34) & " /tmp/out.wav" & gb.NewLine
-    
+    Button2.Tooltip = "Converting to Wav"
+    Print #$Process, Chr$(3);
+    Print #$Process, "cd /tmp" & gb.NewLine
+    Try Kill "/tmp/musik." & File.Ext(ButtonBox1.Text)
+    Copy File.Dir(ButtonBox1.Text) &/ File.Name(ButtonBox1.Text) To "/tmp/musik." & File.Ext(ButtonBox1.Text)
+    If File.Ext(ButtonBox1.Text) = "wav"
+      Print #$Process, "mv " & Chr$(34) & "/tmp/musik.wav" & Chr$(34) & " /tmp/out.wav" & gb.NewLine
+      Print #$Process, "cat > /tmp/go.pokkenCM" & gb.NewLine;
+    Else
+      Print #$Process, "soundconverter -b -m 'audio/x-wav' -s '.wav' " & Chr$(34) & "/tmp/musik." & File.Ext(ButtonBox1.Text) & Chr$(34) & gb.NewLine
+      Print #$Process, "mv " & Chr$(34) & "/tmp/musik.wav" & Chr$(34) & " /tmp/out.wav" & gb.NewLine
+      Print #$Process, "cat > /tmp/go.pokkenCM" & gb.NewLine;
+    Endif
+    Wait 3
+    While Not Exist("/tmp/go.pokkenCM")
+      Print "Not Exist"
+    Wend
+    Kill "/tmp/go.pokkenCM"
+    $Sound = Sound.Load("/tmp/out.wav")
+    $Channel = $Sound.Play(0, 0.2)
+    $observer = New Observer($Channel, True) As "Musik"
+    Button2.Text = "⬛"
+    $isplaying = True
+    ' Print #$Process, "aplay /tmp/out.wav" & gb.NewLine
   Endif
-  
-  Print #$Process, "aplay /tmp/out.wav" & gb.NewLine
-  
+
+End
+
+Public Sub Musik_Finish()
+
+  Button1.text = "▶"
+  Button2.text = "▶"
+  $isplaying = False
+
+End
+
+Public Sub StopPlaying()
+
+
+  $Channel.Stop(0.3)
+  Last.text = "▶"
+  $isplaying = False
+
 End
 
 Public Sub ButtonBox1_Click()
-  
+
   Dialog.Path = User.Home
   If Dialog.OpenFile() Then
-    
+
   Else
     ButtonBox1.Text = Dialog.Path
   Endif
-  
+
 End
 
 Public Sub Button3_Click()
-  
+
   Fwait.Show()
   If Exist($musicModdingPath &/ ButtonBox2.Text) Then
     Kill $musicModdingPath &/ ButtonBox2.Text
@@ -90,27 +139,27 @@ Public Sub Button3_Click()
   Print #$Process, Chr$(3) & gb.NewLine
   Print #$Process, "rm -r /tmp/insert" & gb.NewLine
   Print #$Process, "mkdir /tmp/insert" & gb.NewLine
-  
+
   Wait 0.2
   Copy ButtonBox1.Text To "/tmp/insert/in." & File.Ext(ButtonBox1.Text)
-  
+
   Print #$Process, "cp '" & $origMusicPath &/ ButtonBox2.Text & "' /tmp/insert/" & gb.NewLine
-  If File.Ext(ButtonBox1.Text) = "wav" 
+  If File.Ext(ButtonBox1.Text) = "wav"
   Else
     Print #$Process, "soundconverter -b -m 'audio/x-wav' -s '.wav' '/tmp/insert/in." & File.Ext(ButtonBox1.Text) & "'" & gb.NewLine
   Endif
   Print #$Process, "dotnet /usr/lib/pokkentools/VGAudio/VGAudioCli.dll /tmp/insert/in.wav /tmp/insert/in.idsp" & gb.NewLine
   Print #$Process, "python /usr/lib/pokkentools/nus3bank/nus3inject.py /tmp/insert/" & ButtonBox2.Text & " /tmp/insert/in.idsp" & " 0x0" & gb.NewLine
   Print #$Process, "cp /tmp/insert/" & ButtonBox2.Text & " " & $musicModdingPath & gb.NewLine
-  
+
 End
 
 Public Sub Timer1_Timer()
-  
+
   If Exist($musicModdingPath &/ ButtonBox2.Text) Then
     Fwait.Close()
     Timer1.Stop
     Label4.Text = "successfully!"
   Endif
-  
+
 End

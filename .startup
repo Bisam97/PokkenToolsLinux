@@ -8,4 +8,5 @@ gb.image
 gb.gui
 gb.form
 gb.desktop
+gb.sdl2.audio
 

@@ -1,0 +1,9 @@
+' Gambas class file
+
+Inherits FCMusic
+
+Public Sub _new()
+
+
+
+End

@@ -3,10 +3,13 @@
 { Form Form
   MoveScaled(0,0,90,93)
   { Frame1 Frame
-    MoveScaled(1,1,48,48)
-    Text = ("Pokken Dir Tree")
+    MoveScaled(1,1,89,48)
+    Text = ("Pokken Mod Dir Tree")
     { TreeView1 TreeView
       MoveScaled(1,3,46,44)
+    }
+    { ListView1 ListView
+      MoveScaled(48,3,40,44)
     }
   }
   { Button1 Button
@@ -19,5 +22,8 @@
   { Button2 Button
     MoveScaled(2,89,16,4)
     Text = ("Open Mod Dir")
+  }
+  { Button3 Button
+    MoveScaled(2,57,16,4)
   }
 }

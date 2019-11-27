@@ -1,16 +1,22 @@
 ' Gambas class file
 
 Private $Callfrom As FCMusic
+Private $Cell As _GridView_Cell
+
 
 Public Sub GridView1_Click()
-  
+
+  Try $Cell.Background = Color.White
+  $cell = GridView1.Current
+  $cell.Background = Color.Cyan
+
 End
 
 Public Sub Form_Open()
-  
+
   GridView1.AddColumn("Filename", 300)
   GridView1.AddColumn("Description", 300)
-  
+
   Add("BGM_EXT_001_TUTORIAL01.nus3bank", "Tutorial Music")
   Add("BGM_MEN_001_MODESELECT.nus3bank", "Select Screen Music")
   Add("BGM_MEN_003_TOTALRESULT.nus3bank", "Result Screen Music")
@@ -48,7 +54,7 @@ Public Sub Form_Open()
   Add("BGM_STG_015.nus3bank", "Magikarp Festival")
   Add("BGM_STG_016.nus3bank", "Dragon Nest")
   Add("BGM_STG_017.nus3bank", "Dark Colloseum (Final)")
-  Add("BGM_STG_019.nus3bank", "Thalia Beach       [Thalia is a Nice Twitch Mod]")
+  Add("BGM_STG_019.nus3bank", "Thalia Beach       [Thalia is a good Twitch Mod]")
   Add("BGM_STG_020.nus3bank", "Dojo")
   Add("BGM_STG_023.nus3bank", "WarmUp / Training")
   Add("BGM_SYS_000_STANDBY.nus3bank", "Empty File")
@@ -236,27 +242,27 @@ Public Sub Form_Open()
   Add("SYSTEM_VC_001.nus3bank", "SYSTEM_VC_001.nus3bank")
   Add("SYSTEM_VC_MYTOWN.nus3bank", "SYSTEM_VC_MYTOWN.nus3bank")
   Add("CHARA_P094_V000_VC.nus3bank", "CHARA_P094_V000_VC.nus3bank")
-  
+
 End
 
 Public Sub Add(txt As String, txt2 As String)
-  
+
   GridView1.Rows.Insert(GridView1.Rows.Count, 1)
   GridView1[GridView1.Rows.Count - 1, 0].Text = txt
   GridView1[GridView1.Rows.Count - 1, 1].Text = txt2
-  
+
 End
 
 Public Sub LookmeUp(hFCMusik As FCMusic)
-  
+
   $Callfrom = hFCMusik
   Me.Show()
-  
+
 End
 
 Public Sub Button1_Click()
-  
+
   $Callfrom.buttonbox2.text = GridView1[GridView1.Row, 0].Text
   Me.close
-  
+
 End
