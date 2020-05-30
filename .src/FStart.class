@@ -330,7 +330,7 @@ Public Sub Wizard1_Close()
 
   If Not Exist(User.Home &/ ".switch/Extract/") Then Mkdir User.Home &/ ".switch/Extract/"
   If Not Exist(User.Home &/ ".switch/Extract/Pokken/") Then Mkdir User.Home &/ ".switch/Extract/Pokken/"
-  send("/usr/lib/pokkentools/hactool/hactool -x --basenca " & User.Home &/ ".switch/PokkenBase.nca --romfsdir=" & User.Home &/ ".switch/Extract/Pokken/romfs --exefsdir=" & User.Home &/ ".switch/Extract/Pokken/exefs " & User.home &/ ".switch/PokkenUpdate.nca")
+  send("/usr/lib/pokkentools/hactool/hactool -x --basenca " & ButtonBox3.Text & " --romfsdir=" & User.Home &/ ".switch/Extract/Pokken/romfs --exefsdir=" & User.Home &/ ".switch/Extract/Pokken/exefs " & ButtonBox4.Text)
   Fwait.Show()
   $Extract = True
   Timer1.Start()
